@@ -1,0 +1,222 @@
+{% extends "company/base.html" %}
+
+{%block title%}Project Details{%endblock title%}
+{% block contentheader%}Project Details{% endblock contentheader%}
+{% block breadcrumb%}Project Details{% endblock breadcrumb%}
+
+{% block styleblock %}
+#clockdiv{
+    font-family: sans-serif;
+    color: #fff;
+    display: inline-block;
+    font-weight: 100;
+    text-align: center;
+    font-size: 30px;
+}
+#clockdiv > div{
+    padding: 10px;
+    border-radius: 5px;
+    background: blue;
+    display: inline-block;
+}
+#clockdiv div > span{
+    padding: 15px;
+    border-radius: 5px;
+    background: green;
+    display: inline-block;
+    margin-top: 20px;
+}
+smalltext{
+    padding-top: 5px;
+    font-size: 16px;
+}
+#heading{
+    padding: 30px;
+}
+{% endblock styleblock %}
+
+{%block content%}
+{% if isEmailSent %}
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+  An email is sent to <strong>{{mailTo}}</strong>! Now wait for their response!
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{% endif %}
+{% if mailNotSent %}
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+  Error from <strong>email server</strong>. Please try again!
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{% endif %}
+{% if messages %}				
+    {% for message in messages %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{message}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    {% endfor %}			
+{% endif %}
+<!-- Content -->
+  <div class="card text-center">
+    <div class="card-header">
+      <h3>{{project.project_name}}<h3>
+    </div>
+    <div class="card-body">
+      <h5 class="card-title">Published By: {{project.developed_for}}</h5>
+      <p class="card-text">{{project.project_description}}</p>
+      <h3 id="heading">Auction will end in!</h3>
+      <div id="clockdiv">
+        <div>
+          <span class="days" id="day"></span>
+          <div class="smalltext">Days</div>
+        </div>
+        <div>
+          <span class="hours" id="hour"></span>
+          <div class="smalltext">Hours</div>
+        </div>
+        <div>
+          <span class="minutes" id="minute"></span>
+          <div class="smalltext">Minutes</div>
+        </div>
+        <div>
+          <span class="seconds" id="second"></span>
+          <div class="smalltext">Seconds</div>
+        </div>
+      </div>
+
+      <p id="demo"></p>
+
+      {%if project.is_bidding_end %}
+      <button href="#" disabled class="btn btn-primary">Auction is ended!</button>
+      {%elif project.is_bidding_started %}
+      <a href="/company/end_auction/{{project.pk}}" class="btn btn-primary">End Auction</a>
+      {%else%}
+      <button href="#" disabled class="btn btn-primary">Auction is not started yet!</button>
+      {% endif %}
+    </div>
+    <div class="card-footer text-muted">
+    {% if project.is_bidding_started %}
+    
+    {% else %}
+    Auction will Start on: <a href="">{{project.bidding_start | date:"D, d-M-Y h:i A"}}</a><br/>
+    {% endif %}
+    {% if project.is_bidding_end %}
+    Auction ended on:
+    {% else %}
+    Auction will end on:
+    {% endif %}
+       <a href="">{{project.bidding_end | date:"D, d-M-Y h:i A"}}</a>
+      <p id="datehere" style="display: none">{{project.bidding_end | date:"b d, Y G:i:s"}}
+      <p>
+    </div>
+  </div>
+<div class="content">
+<table class="table table-dark" >
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Bidder</th>
+      <th scope="col">Price</th>
+      <th scope="col">Date</th>
+      <th scope="col">Time</th>
+      <th scope="col">Sign MOU</th>
+
+
+    </tr>
+  </thead>
+  <tbody id="myTable">
+      {% for bidding in biddings %} 
+        <tr>
+          <th scope="row" >{{forloop.counter}}</th>
+          <td><a href="/company/profile/{{bidding.bidder.admin.pk}}">{{bidding.bidder}}</a></td>
+          <td>$ {{bidding.bidding_price}} </td>     
+          <td>{{bidding.performed_at | date:"D, d-M-Y"}}</td>
+          <td>{{bidding.performed_at | date:"h:i:s A"}}</td>
+          {% comment %} <td><a href="#" class="btn btn-dark">Sign MOU</a></td> {% endcomment %}
+          <td><a class="btn btn-primary" 
+                      href="/company/start_deal/{{project.pk}}/{{bidding.bidder.pk}}/" 
+                      onclick="return confirm('Are you sure you want to start deal with {{bidding.bidder}}?');"
+                      > Start Deal </a></td>
+ 
+        </tr>
+      {% endfor %}
+  </tbody>
+</table>
+
+</div> <!-- /.content -->
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Enter you bid...</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="post" action="">
+          {% csrf_token %}
+          <input type="number" style="display: none" readonly name="project_id" class="form-control" value="{{project.pk}}">
+          <div class="input-group mb-3">
+
+            <div class="custom-file mb-3">
+              <input type="file" class="custom-file-input" id="customFile">
+              <label class="custom-file-label" for="customFile">Choose file</label>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Save changes</button>
+          </div>
+
+        </form>
+
+      </div>
+
+
+    </div>
+  </div>
+
+
+
+</div>
+
+<script>
+  {% comment %} "dec 31, 2020 15:37:25" {% endcomment %}
+  date = document.getElementById("datehere").innerHTML;
+  var deadline = new Date(date).getTime();
+  var x = setInterval(function () {
+
+    var now = new Date().getTime();
+    var t = deadline - now;
+    var days = Math.floor(t / (1000 * 60 * 60 * 24));
+    var hours = Math.floor((t % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((t % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((t % (1000 * 60)) / 1000);
+    document.getElementById("day").innerHTML = days;
+    document.getElementById("hour").innerHTML = hours;
+    document.getElementById("minute").innerHTML = minutes;
+    document.getElementById("second").innerHTML = seconds;
+    if (t < 0) {
+      clearInterval(x);
+      document.getElementById("demo").innerHTML = "TIME UP";
+      document.getElementById("day").innerHTML = '0';
+      document.getElementById("hour").innerHTML = '0';
+      document.getElementById("minute").innerHTML = '0';
+      document.getElementById("second").innerHTML = '0';
+    }
+  }, 1000); 
+
+  
+
+</script>
+
+{%endblock content %}

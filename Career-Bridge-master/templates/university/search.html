@@ -1,0 +1,61 @@
+{% extends "university/base.html" %}
+
+{%block title%}Search{%endblock title%}
+
+<{%block content%}
+
+<div class="content">
+    <div class="row">
+        <div class="col-sm-6">
+            <ul class="list-group">            
+                <li class="list-group-item bg-primary text-center text-light"><h3>Companies</h3></li>
+                {% if companies %}
+                    {% for company in companies %}
+                        <li class="list-group-item"><a class="text-primary" href="/company/profile/{{company.admin.pk}}"><h5>{{company.name}}<h5></a></li>
+                    {% endfor %}
+                {% else %}
+                    <li class="list-group-item text-center"><h5>No result found!<h5></a></li>
+                {% endif %}
+                
+            </ul>
+        </div>
+        <div class="col-sm-6">
+            <ul class="list-group">            
+                {% if universities or services %}
+                    {% if universities %}
+                        <li class="list-group-item bg-dark text-center text-light"><h3>Universities</h3></li>
+                        {% for university in universities %}
+                            <li class="list-group-item"><a class="text-primary" href="/company/profile/{{university.admin.pk}}"><h5>{{university.name}}</h5></a>
+                             {% comment %} {% if university.ranking %}
+                                <span class="float-right">Ranking: {{university.ranking | floatformat}}</span>                           
+                             {% else %}
+                                <span class="float-right">Ranking: Nill</span>
+                             {% endif %} {% endcomment %}
+                             
+                             </li>
+                        {% endfor %}
+                    {% else %}
+                    {% endif %}
+        
+                    {% if services %}
+                        <li class="list-group-item bg-dark text-center text-light"><h3>Universities for this service</h3></li>
+                        {% for service in services %}
+                            <li class="list-group-item"><a class="text-primary" href="/company/profile/{{service.university.admin.pk}}"><h5>{{service.university}}</h5></a>
+                            
+                            </li>
+                        {% endfor %}
+                                            
+                    {% else %}
+                    {% endif %}
+
+                {% else %}
+                    <li class="list-group-item bg-dark text-center text-light"><h3>Universities</h3></li>
+                    <li class="list-group-item text-center"><h5>No result found!<h5></a></li>
+                {% endif %}
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+{%endblock content %}

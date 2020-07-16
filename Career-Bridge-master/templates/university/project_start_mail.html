@@ -1,0 +1,11 @@
+{% autoescape off %}
+
+Hi {{ company_name }},
+{{user.fullname}} accepted your proposal and signed MOU. Now he is going to start work on the project "{{project_name}}"
+
+Remarks by {{user.fullname}}
+{{remarks}}
+{% comment %} {{f"http://{{domain}}/university/confirm_mou/{{project.pk}}/{{company.pk}}"}} {% endcomment %}
+http://{{ domain }}{% url 'confirmation_mail_received' %}
+
+{% endautoescape %}

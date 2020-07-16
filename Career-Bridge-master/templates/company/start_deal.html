@@ -1,0 +1,8 @@
+{% autoescape off %}
+
+Hi {{ university_name }},
+A company "{{company_name}}" want to start a deal with you for the project "{{project_name}}", Click the link given below to start the deal.
+
+http://{{ domain }}{% url 'confirm_deal' project_id=project_id company_id=company_id %}
+
+{% endautoescape %}

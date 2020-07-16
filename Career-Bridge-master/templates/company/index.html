@@ -1,0 +1,187 @@
+{% extends "company/base.html" %}
+
+{%block title%}Dashboard{%endblock title%}
+{% block dashactive%}active{% endblock dashactive%}
+{% block contentheader%}Dashboard{% endblock contentheader%}
+{% block breadcrumb%}Dashboard{% endblock breadcrumb%}
+
+
+{% block script %}
+
+{% endblock script %}
+
+<script>
+{% block jquery %}
+var endpoint = '/university/api/chart/data/{{request.user.pk}}'
+var data = []
+var labels = []
+var chart_label = ""
+$.ajax({
+    method: "GET",
+    url: endpoint,
+    success: function(response_data){
+        console.log(response_data)
+        if(response_data.data.length > 0){
+            data = response_data.data
+            labels = response_data.labels
+            chart_label = response_data.chart_label
+            setChartData()
+        }
+        else{
+            $("#myChart").hide()
+            $("#error").show()
+        }
+
+    },
+    error: function(error){
+        $("#myChart").hide()
+        $("#error").show()
+
+        console.log("error")
+        console.log(error)
+    }
+})
+
+function setChartData(){
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: chart_label,             
+                data: data,
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 99, 132, 1)',                    
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 99, 132, 1)',                    
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        fontColor: 'white',
+                    }
+                }],
+                xAxes: [{
+                    ticks: {
+                        fontColor: 'white'
+                    }
+                }]
+
+            },
+            legend: {
+                labels: {
+                    // This more specific font property overrides the global property
+                    fontColor: 'white'  
+                }
+            }
+        }
+    });
+}
+{% endblock %}
+</script>
+
+{% block content %}
+<!-- Main content -->
+<div class="content">
+        {% if messages %}				
+            {% for message in messages %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{message}}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}			
+        {% endif %}
+
+        {% if request.user.is_new %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                Looks like, you are new here! Please <strong><a href="/company/profile/{{request.user.pk}}" class="alert-link">Update</a></strong> your profile picture!
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>                    
+        {% endif %}
+        {% if isMailSent %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                Your mail is <strong>Sent!</strong> Thanks.
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>                    
+        {% endif %}
+
+        <div class="row justify-content-center bg-dark" style="border-radius: 50px;">
+            <div class="col-sm-10" style="position: relative;">
+                <canvas id="myChart" height="150"></canvas>
+                <h1 style="display: none" id="error">No project is bidded yet!</h1>
+            </div>
+        </div>
+        
+        <div class="row justify-content-center mt-3" style="border-radius: 50px">
+            <div class="col-sm-10">
+            <h1 class="text-center">Your active projects</h1>
+            {% if projects %}
+            {% for project in projects %}
+                <div class="card">
+                <div class="card-header bg-primary">
+                    <h3>{{project}}</h3>
+                </div>
+                <div class="card-body">
+                    <h5>Description</h5>
+                    <p class="card-text" style="margin-left: 30px">{{project.project_description}}</p>
+                    <p style="text-align: right">Published at: <i>{{project.created_at}}</i></p>
+                    <a href="/company/projet_details/{{project.pk}}" class="btn btn-primary">Details</a>
+                    <a href="/company/milestones/{{project.pk}}" class="btn btn-primary">Milestones</a>
+                    {% if project.is_completed %}
+                        <button href="#" class="btn btn-dark disabled mt-2">Marked as completed!</button>
+                    {% else %}
+                    <form action="/company/mark_as_complete/" method="POST">
+                        {% csrf_token %}
+                        <input type="text" value="{{project.pk}}" name="project_id" style="display: none">
+                        <button type="submit" onclick="return confirm('Are you sure you want to mark this project as complete?');" class="btn btn-dark mt-2">Mark as Complete</button>
+                    </form>
+                    {% endif %}
+                    
+                </div>
+                </div>
+            {% endfor %}
+        {% else %}
+        <h3 class="text-center bg-primary rounded mt-3 p-3">No Active Projects Yet!</h3>
+        {% endif %}
+            </div>
+        </div>
+
+<script>
+
+</script>
+
+
+
+</div>
+{% endblock content %}

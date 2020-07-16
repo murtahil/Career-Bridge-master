@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+{%load static%}
+<html lang="en">
+
+<head>
+	<title>Sign Up</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--===============================================================================================-->
+	<link rel="icon" type="image/png" href="{% static 'login/images/icons/favicon.ico' %}" />
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'login/vendor/bootstrap/css/bootstrap.min.css' %}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css"
+		href="{% static 'login/fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'login/vendor/animate/animate.css' %}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'login/vendor/css-hamburgers/hamburgers.min.css' %}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'login/vendor/select2/select2.min.css' %}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'login/css/util.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'login/css/main.css' %}">
+	<!--===============================================================================================-->
+
+	<style>
+		.wrap-signup {
+			width: 960px;
+			background: #fff;
+			border-radius: 10px;
+			overflow: hidden;
+
+			display: -webkit-box;
+			display: -webkit-flex;
+			display: -moz-box;
+			display: -ms-flexbox;
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-between;
+			padding: 50px 100px 50px 100px;
+		}
+	</style>
+</head>
+
+<body>
+
+	<div class="limiter">
+		<div class="container-login100">
+			<div class="wrap-signup">
+
+				<form method="POST" action="" id="signup-form" class="signup-form">
+					{% csrf_token %}
+					<h2 class="form-title" style="text-align: center;">Create account</h2>
+					<div class="row">
+						<div class="col-sm-4">
+							<div class="form-group">
+								{{ form.user_type }}
+
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="form-group">
+								{{ form.fullname }}
+							</div>
+							<div class="form-group">
+								{{ form.phone }}
+							</div>
+							<div class="form-group">
+								{{ form.website }}
+							</div>
+						</div>
+
+						<div class="col-sm-6">
+							<div class="form-group">
+								{{ form.email }}
+							</div>
+							<div class="form-group">
+								{{ form.password }}
+							</div>
+							<div class="form-group">
+								{{ form.password2 }}
+							</div>
+
+						</div>
+					</div>
+					{% if form.errors %}
+						{%for key, value in form.errors.items %}
+
+							<div class="alert alert-danger alert-dismissible fade show" role="alert">
+								<strong>{{value}}</strong>
+								<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+
+						{%endfor%}
+						
+					{%endif%}
+					<div class="form-group">
+						<input type="checkbox" name="agree-term" id="agree-term" class="agree-term" />
+						<label for="agree-term" class="label-agree-term"><span><span></span></span>I agree all
+							statements in <a href="#" class="term-service">Terms of service</a></label>
+					</div>
+					<div class="form-group">
+						<input class="btn btn-primary" type="submit" value="Submit">
+					</div>
+				</form>
+				<div class="text-center p-t-30">
+					<span class="txt1">
+						Already have an account?
+					</span>
+					<a class="txt2" href="/login">
+						Login Here
+						<i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+	<!--===============================================================================================-->
+	<script src="{% static 'login/vendor/jquery/jquery-3.2.1.min.js' %}"></script>
+	<!--===============================================================================================-->
+	<script src="{% static 'login/vendor/bootstrap/js/popper.js' %}"></script>
+	<script src="{% static 'login/vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+	<!--===============================================================================================-->
+	<script src="{% static 'login/vendor/select2/select2.min.js' %}"></script>
+	<!--===============================================================================================-->
+	<script src="{% static 'login/vendor/tilt/tilt.jquery.min.js' %}"></script>
+	<!--===============================================================================================-->
+	<script src="{% static 'login/js/main.js' %}"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,259 @@
+{% extends "company/base.html" %}
+{% load static %}
+{%block title%}Profile{%endblock title%}
+{% block profileactive%}active{% endblock profileactive%}
+{% block contentheader%}Profile{% endblock contentheader%}
+{% block breadcrumb%}Profile{% endblock breadcrumb%}
+
+{% block content %}
+{% if company %}
+<div class="content">
+    {% if company.logo %}
+        <div class="row justify-content-center">
+          <img class="rounded" style="object-fit: cover; width: 200px; height: 200px;" src="{{company.logo.url}}" width="100" height="100">                            
+      </div>
+    {% else %}
+        <div class="row justify-content-center">
+            <img class="rounded" style="object-fit: cover; width: 200px; height: 200px;" src="{% static 'defaultdp.jpg' %}" width="100" height="100">                            
+        </div>
+    {% endif %}
+    
+    {% if isPersonal %}
+
+    <div class="row justify-content-center mt-3">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+        Change Photo
+      </button>
+      
+    </div>
+
+    <!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Change Profile Picture</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="post" action="" enctype="multipart/form-data">
+          {% csrf_token %}
+          
+          <div class="container">
+                <div class="picture-container">
+                    <div class="picture">
+                        <img src="https://lh3.googleusercontent.com/LfmMVU71g-HKXTCP_QWlDOemmWg4Dn1rJjxeEsZKMNaQprgunDTtEuzmcwUBgupKQVTuP0vczT9bH32ywaF7h68mF-osUSBAeM6MxyhvJhG6HKZMTYjgEv3WkWCfLB7czfODidNQPdja99HMb4qhCY1uFS8X0OQOVGeuhdHy8ln7eyr-6MnkCcy64wl6S_S6ep9j7aJIIopZ9wxk7Iqm-gFjmBtg6KJVkBD0IA6BnS-XlIVpbqL5LYi62elCrbDgiaD6Oe8uluucbYeL1i9kgr4c1b_NBSNe6zFwj7vrju4Zdbax-GPHmiuirf2h86eKdRl7A5h8PXGrCDNIYMID-J7_KuHKqaM-I7W5yI00QDpG9x5q5xOQMgCy1bbu3St1paqt9KHrvNS_SCx-QJgBTOIWW6T0DHVlvV_9YF5UZpN7aV5a79xvN1Gdrc7spvSs82v6gta8AJHCgzNSWQw5QUR8EN_-cTPF6S-vifLa2KtRdRAV7q-CQvhMrbBCaEYY73bQcPZFd9XE7HIbHXwXYA=s200-no" class="picture-src" id="wizardPicturePreview" title="">
+                        {{form.logo}}
+                    </div>
+                    <h6 class="">Choose Picture</h6>
+                </div>
+            </div>          
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Upload</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+    {% endif %}
+    
+    <br/>
+    <div class="row justify-content-center">
+        <div class="text-center">
+            <h1>{{company.name}}</h1>
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                      <strong>Hi {{request.user.fullname}}!</strong> {{message}}
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <p>Company</p>
+            <p>Contact #: <b>{{user.phone}}</b></p>
+            <p>Email: <b>{{user.email}}</b></p>
+            <p>Website: <b><a href="{{user.website}}" target="_blank">{{user.website}}</a></b></p>
+            <p>Address: <b>{{company.address}}</b></p>
+            {% if isPersonal %}
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter2">
+                    Edit Info
+                </button>
+            {% endif %}
+            
+        </div>
+    </div>    
+</div>        <!-- /.content -->
+{% if isPersonal %}
+
+             <!-- Modal -->
+<div class="modal fade" id="exampleModalCenter2" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Edit Profile Info</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="post" action="/company/update_info/">
+          {% csrf_token %}
+
+            <div class="form-group">
+                <label for="exampleInputEmail1">Name</label>
+                <input type="text" name="name" value="{{user.fullname}}" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+            </div>
+
+            <div class="form-group">
+                <label for="exampleInputEmail1">Contact #</label>
+                <input type="text" name="phone" value="{{user.phone}}" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+            </div>
+
+            <div class="form-group">
+                <label for="exampleInputEmail1">Website</label>
+                <input type="text" name="website" value="{{user.website}}" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+            </div>
+
+            <div class="form-group">
+                <label for="exampleInputEmail1">Address</label>
+                <input type="text" name="address" value="{{company.address}}" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+            </div>
+            
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Update</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% else %}
+{% endif %}
+<div class="content">
+<div class="row justify-content-center">
+        <div class="text-center">
+            <h1>Projects</h1>            
+        </div>
+    </div> 
+    {% if projects %}
+    {% for project in projects %}
+        <div class="card mt-3">
+            <div class="card-header bg-primary"  style="color: white">
+                {% if project.is_completed %}
+                  <h3>{{project}}</h3><br/>Completed
+                {% else %}
+                  <h3>{{project}}</h3><br/>Under development
+                {% endif %}
+                
+            </div>
+            <div class="card-body">
+                <h4>Description</h4>
+                <p class="card-text" style="margin-left: 30px">{{project.project_description}}</p>
+                <p style="text-align: right">Published at: <i>{{project.created_at}}</i></p>
+                {% if isPersonal %}
+                <a href="/company/projet_details/{{project.pk}}/" class="btn btn-primary">Details</a>
+                {% endif %}
+                
+            </div>
+        </div>
+    {% endfor %}
+    {% else %}
+        <h3 class="text-center" style="color: red">No Projects Yet!</h3>
+    {% endif %}
+</div>
+
+{% else %}
+
+<div class="content">
+{% if university.logo %}
+        <div class="row justify-content-center">
+          <img class="rounded" style="object-fit: cover; width: 200px; height: 200px;" src="{{university.logo.url}}" width="100" height="100">                            
+      </div>
+{% else %}
+    <div class="row justify-content-center">
+        <img class="rounded" style="object-fit: cover; width: 200px; height: 200px;" src="{% static 'defaultdp.jpg' %}" width="100" height="100">                            
+    </div>
+{% endif %}
+
+<div class="row justify-content-center">
+    <div class="text-center">
+        <h1>{{university.name}}</h1>
+        <p>University</p>
+        <p>Contact #: <b>{{user.phone}}</b></p>
+        <p>Email: <b>{{user.email}}</b></p>
+        <p>Website: <b><a href="{{user.website}}" target="_blank">{{user.website}}</a></b></p>
+        <p>Address: <b>{{university.address}}</b></p>
+        {% if university.ranking %}
+            <p>Ranking: <b>{{university.ranking | floatformat}}</b></p>
+        {% else %}
+            <p>Ranking: <b>NILL</b></p>
+        {% endif %}
+        
+        <p class="mt-3">Services: </p>
+        {% if services %}
+          {% for service in services %}
+              <p style="display: inline"><b>{{service.service_name}}. </b></p>
+          {% endfor %}          
+        {% else %}
+            <p style="display: inline"><b>Nothing to show!</b></p>
+        {% endif %}
+
+
+    </div>
+
+</div>
+
+<div class="row justify-content-center">
+        <div class="text-center">
+            <h1>Projects working on</h1>            
+        </div>
+    </div> 
+    {% for project in projects %}
+        <div class="card mt-3">
+            <div class="card-header bg-primary"  style="color: white">
+                {% if project.is_completed %}
+                  <h3>{{project}}</h3><br/>Completed
+                {% else %}
+                  <h3>{{project}}</h3><br/>Under development<br/>Published by <a href="/company/profile/{{project.developed_for.admin.pk}}">{{project.developed_for}}</a>
+                {% endif %}
+                
+            </div>
+            <div class="card-body">
+                <h4>Description</h4>
+                <p class="card-text" style="margin-left: 30px">{{project.project_description}}</p>
+                <p style="text-align: right">Published at: <i>{{project.created_at}}</i></p>
+                
+            </div>
+        </div>
+    {% endfor %}
+
+{% endif %}
+
+<script>
+$(document).ready(function(){
+// Prepare the preview for profile picture
+    $("#wizard-picture").change(function(){
+        readURL(this);
+    });
+});
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            $('#wizardPicturePreview').attr('src', e.target.result).fadeIn('slow');
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+</script>
+{%endblock content%}

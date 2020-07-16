@@ -1,0 +1,64 @@
+{% extends "company/base.html" %}
+
+{%block title%}Active Projects{%endblock title%}
+{% block contentheader%}Milestones{% endblock contentheader%}
+{% block breadcrumb%}Milestones{% endblock breadcrumb%}
+{% block content %}
+<!-- Main content -->
+<div class="content">
+    <div class="row">
+        <div class="col-sm-6">
+            {% if project %}
+            <div class="card">
+                <div class="card-header bg-primary">
+                    <h3>{{project}}</h3>
+                </div>
+                <div class="card-body">
+                    <h5>Description</h5>
+                    <p class="card-text" style="margin-left: 30px">{{project.project_description}}</p>
+                    <p style="text-align: right">Published at: <i>{{project.created_at}}</i></p>
+                    <a href="/company/projet_details/{{project.pk}}" class="btn btn-primary">Details</a>
+                </div>
+            </div>
+        
+        {% else %}
+        <h3 class="text-center bg-primary rounded mt-3 p-3">No Active Projects Yet!</h3>
+        {% endif %}
+        </div>
+        <div class="col-sm-6">
+            <ul class="list-group ">
+                <li class="list-group-item bg-primary text-center text-light">
+                    <h3>Milestones</h3>
+                </li>
+
+                {% if isMouSigned %}
+                    {% if milestones %}
+                    {% for milestone in milestones %}
+                    <li class="list-group-item">
+                        <a class="btn btn-dark mb-2 p-3 btn-block" 
+                        href="" >
+                            {{milestone.name}}
+                        </a>
+                        <p>{{milestone.description}}</p>
+                        <p>Start On: <i>{{milestone.start_date | date:'D d-M-Y'}}</i></p>
+                        <p>Ending On: <i>{{milestone.end_date | date:'D d-M-Y'}}</i></p>
+                        
+                    </li>
+                    {% endfor %}
+                    {% else %}
+                    <li class="list-group-item text-center">
+                        <h5>No milestone yet!<h5></a>
+                    </li>
+                    {% endif %}
+                {% else %}
+                    <h3 class="text-center mt-5">MOU Not Signed yet!</h3>
+                    <p class="text-center">Sign MOU before seeing milestones!</p>
+                    <a type="submit" class="btn btn-dark mt-5" href="/company/sign_mou/{{project.pk}}">Sign MOU</a>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+
+        
+</div>
+{% endblock content %}

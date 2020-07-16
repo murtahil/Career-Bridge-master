@@ -1,0 +1,32 @@
+{% extends "university/base.html" %}
+
+{%block title%}Project Details{%endblock title%}
+{% block myprojectactive %}active{% endblock myprojectactive %}
+{%block content%}
+
+{% if projects %}
+    {% for project in projects %}
+        <div class="card">
+            <div class="card-header bg-dark"  style="color: white">
+                <h3>{{project}}
+                {% if project.is_completed %}
+                    <button href="#" class="btn btn-primary disabled">completed!</button>
+                {% endif %}
+                </h3>
+            </div>
+            <div class="card-body">
+                <h4>Description</h4>
+                <p class="card-text" style="margin-left: 30px">{{project.project_description}}</p>
+                <p style="text-align: right">Published at: <i>{{project.created_at}}</i></p>
+                <a href="/university/project_details/{{project.pk}}" class="btn btn-dark">Details</a>
+                <a href="/university/create_milestone/{{project.pk}}" class="btn btn-dark">Milestones</a>
+                <a href="/university/mou_details/{{project.pk}}" class="btn btn-dark">MOU Details</a>
+                
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    <h1 class="text-center">You don't have any active project yet!</h1>
+{% endif %}
+
+{%endblock content %}

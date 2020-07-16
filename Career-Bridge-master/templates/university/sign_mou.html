@@ -1,0 +1,58 @@
+{% extends "university/base.html" %}
+
+{%block title%}Project Details{%endblock title%}
+
+{%block content%}
+<div class="content">
+<h3 style="text-align: center">You are going to sign MOU with "{{company.name}}" for a project named "{{project.project_name}}"</h3>
+
+<div class='content'>
+    <div class='row justify-content-center'>
+        <div class='col-sm-8' style="background: blue; padding: 50px; border-radius: 50px; color: white">
+            <h1 style="text-align: center; margin-bottom: 40px">Let's Go then</h1>
+            <form enctype="multipart/form-data" method="POST">
+                {% csrf_token %}
+                <label for="basic-url">Upload your MOU as Image or PDF file *</label>
+
+                <div class="input-group mb-3">
+
+                    <div class="custom-file mb-3">
+                        {{ form.university_mou }}
+                        <label class="custom-file-label" for="customFile">Choose a file</label>
+                    </div>
+                </div>
+                {% if messages %}				
+                    {% for message in messages %}
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            {{message}}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    {% endfor %}			
+                {% endif %}
+                <label for="basic-url">Wanna say something?</label>
+
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Your Remarks</span>
+                    </div>
+                    {{ form.university_remarks }}
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</div>
+<script>
+    $(".custom-file-input").on("change", function () {
+        var fileName = $(this).val().split("\\").pop();
+        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+    });
+</script>
+
+{%endblock content %}

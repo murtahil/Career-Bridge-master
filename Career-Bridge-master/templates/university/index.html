@@ -1,0 +1,220 @@
+{% extends "university/base.html" %}
+
+{%block dashboardactive%}active{%endblock dashboardactive%}
+{%block title%}Index{%endblock title%}
+
+<script>
+{% block jquery %}
+var endpoint = '/university/api/chart/data/{{request.user.pk}}'
+var data = []
+var labels = []
+var chart_label = ""
+$.ajax({
+    method: "GET",
+    url: endpoint,
+    success: function(response_data){
+        console.log(response_data)
+        if(response_data.data.length > 0){
+            data = response_data.data
+            labels = response_data.labels
+            chart_label = response_data.chart_label
+            setChartData()
+        }
+        else{
+            $("#myChart").hide()
+            $("#error").show()
+        }
+
+    },
+    error: function(error){
+        $("#myChart").hide()
+        $("#error").show()
+
+        console.log("error")
+        console.log(error)
+    }
+})
+
+function setChartData(){
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: chart_label,             
+                data: data,
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 99, 132, 1)',                    
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        //fontColor: 'white',
+                    }
+                }],
+                xAxes: [{
+                    ticks: {
+                        //fontColor: 'white'
+                    }
+                }]
+
+            },
+            legend: {
+                labels: {
+                    //fontColor: 'rgb(255, 99, 132)'
+                    // This more specific font property overrides the global property
+                    //fontColor: 'white'  
+                }
+            }
+        }
+    });
+}
+{% endblock %}
+</script>
+
+{%block content%}
+{% if messages %}				
+    {% for message in messages %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>{{message}}</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    {% endfor %}			
+{% endif %}
+<!-- Content -->
+        <div class="content">
+            <!-- Animated -->
+            <div class="animated fadeIn">
+                <!-- Widgets  -->
+                <div class="row">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="stat-widget-five">
+                                    <div class="stat-icon dib flat-color-1">
+                                        <i class="pe-7s-cash"></i>
+                                    </div>
+                                    <div class="stat-content">
+                                        <div class="text-left dib">
+                                            <div class="stat-text"><span class="count">{{no_of_projects}}</span></div>
+                                            <div class="stat-heading">No. of Projects</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="stat-widget-five">
+                                    <div class="stat-icon dib flat-color-2">
+                                        <i class="pe-7s-cart"></i>
+                                    </div>
+                                    <div class="stat-content">
+                                        <div class="text-left dib">
+                                            <div class="stat-text"><span class="count">{{no_of_bids}}</span></div>
+                                            <div class="stat-heading">Bids</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="stat-widget-five">
+                                    <div class="stat-icon dib flat-color-3">
+                                        <i class="pe-7s-browser"></i>
+                                    </div>
+                                    <div class="stat-content">
+                                        <div class="text-left dib">
+                                            <div class="stat-text"><span class="count">{{no_of_companies}}</span></div>
+                                            <div class="stat-heading">Buyers</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="stat-widget-five">
+                                    <div class="stat-icon dib flat-color-4">
+                                        <i class="pe-7s-users"></i>
+                                    </div>
+                                    <div class="stat-content">
+                                        <div class="text-left dib">
+                                            <div class="stat-text"><span class="count">{{no_of_universities}}</span></div>
+                                            <div class="stat-heading">Sellers</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Widgets -->
+                <div class="clearfix"></div>
+                <!-- Orders -->
+                <div class="row justify-content-center" style="border-radius: 50px">
+                    <div class="col-sm-10">
+                        <canvas id="myChart" height="150"></canvas>
+                        <h1 style="display: none" id="error">No project is bidded yet!</h1>
+                    </div>
+                </div>
+
+                <h1 class="m-3 p-3 rounded text-center bg-dark text-light">Your Projects</h1>
+                {% if projects %}
+                    {% for project in projects %}
+                        <div class="card">
+                            <div class="card-header bg-dark"  style="color: white">
+                                <h3>{{project}}</h3>
+                            </div>
+                            <div class="card-body">
+                                <h4>Description</h4>
+                                <p class="card-text" style="margin-left: 30px">{{project.project_description}}</p>
+                                <p style="text-align: right">Published at: <i>{{project.created_at}}</i></p>
+                                <a href="/university/project_details/{{project.pk}}" class="btn btn-dark">Details</a>
+                                <a href="/university/create_milestone/{{project.pk}}" class="btn btn-dark">Milestone</a>
+                                <a href="/university/mou_details/{{project.pk}}" class="btn btn-dark">MOU Details</a>
+
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <h1 class="text-center">You don't have any active project yet!</h1>
+                {% endif %}
+
+
+
+            </div>
+                <!-- /.orders -->
+                <!-- /.content -->
+{%endblock content %}

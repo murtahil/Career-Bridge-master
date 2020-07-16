@@ -1,0 +1,11 @@
+{% autoescape off %}
+
+Hi {{ university_name }},
+{{company_name}} signed an MOU with you for the project "{{project_name}}", Click the link given below to confirm your deal.
+
+Remarks by {{company_name}}
+{{remarks}}
+{% comment %} {{f"http://{{domain}}/university/confirm_mou/{{project.pk}}/{{company.pk}}"}} {% endcomment %}
+http://{{ domain }}{% url 'confirm_mou' project_id=project_id company_id=company_id %}
+
+{% endautoescape %}

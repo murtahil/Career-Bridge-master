@@ -1,0 +1,117 @@
+{% extends "company/base.html" %}
+
+{%block title%}Active Projects{%endblock title%}
+{% block activeprojectsactive%}active{% endblock activeprojectsactive%}
+{% block contentheader%}Active Projects{% endblock contentheader%}
+{% block breadcrumb%}Active Projects{% endblock breadcrumb%}
+{% block content %}
+<!-- Main content -->
+<div class="content">
+        {% if messages %}				
+            {% for message in messages %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{message}}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}			
+        {% endif %}
+        {% if projects %}
+            {% for project in projects %}
+                <div class="card">
+                <div class="card-header bg-primary">
+                    <h3>{{project}}</h3>
+                </div>
+                <div class="card-body">
+                    <p>Developer: <a href="/company/profile/{{project.developed_by.admin.pk}}">{{project.developed_by}}</a></p>
+                    <h5>Description</h5>
+                    <p class="card-text" style="margin-left: 30px">{{project.project_description}}</p>
+                    <p style="text-align: right">Published at: <i>{{project.created_at}}</i></p>
+                    <a href="/company/projet_details/{{project.pk}}" class="btn btn-primary mt-2">Details</a>
+                    <a href="/company/milestones/{{project.pk}}" class="btn btn-primary mt-2">Milestones</a>
+                    <a href="/company/mou_details/{{project.pk}}" class="btn btn-primary mt-2">MOU Details</a>
+                    {% if project.is_completed %}
+                        <button href="#" class="btn btn-dark disabled mt-2">Marked as complete!</button>
+                        {% if not project.is_rated %}
+                        <button href="#" value="{{project.pk}}" class="btn btn-primary mt-2 rate" data-toggle="modal" data-target="#exampleModalCenter2">Rate Project</button>
+                        {% else %}
+                        <button href="#" class="btn btn-dark mt-2 disabled">Rated ({{project.get_rating}})!</button>
+                        {% endif %}
+
+                    {% else %}
+                    <form action="/company/mark_as_complete/" method="POST">
+                        {% csrf_token %}
+                        <input type="text" value="{{project.pk}}" name="project_id" style="display: none">
+                        <button type="submit" onclick="return confirm('Are you sure you want to mark this project as complete?');" class="btn btn-dark mt-2">Mark as Complete</button>
+                    </form>
+                    {% endif %}
+                    
+                </div>
+                </div>
+            {% endfor %}
+        {% else %}
+        <h3 class="text-center bg-primary rounded mt-3 p-3">No Active Projects Yet!</h3>
+        {% endif %}
+</div>
+
+
+             <!-- Modal -->
+<div class="modal fade" id="exampleModalCenter2" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Rate this project</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="post">
+          {% csrf_token %}
+           <input type="hidden" name="project_id" id="pid">
+           <div class="question1"><b>On time delivery: </b></div>
+           <input type="hidden" name="q1" id="q1" value="0">
+           <div class="question2"><b>Service: </b></div> 
+           <input type="hidden" name="q2" id="q2" value="0">
+           <div class="question3"><b>Dummy: </b></div> 
+           <input type="hidden" name="q3" id="q3" value="0">
+           <div class="question4"><b>Dummy: </b></div> 
+           <input type="hidden" name="q4" id="q4" value="0">
+           <div class="form-group mt-5">
+                <label for="exampleFormControlTextarea1">Feedback</label>
+                <textarea class="form-control" name="feedback" rows="3"></textarea>
+            </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Rate</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    $(document).ready(function(){
+        $(".question1").starrr().on('starrr:change', function(e, value){
+            $('#q1').val(value);
+        });
+        $(".question2").starrr().on('starrr:change', function(e, value){
+            $('#q2').val(value);
+
+        });
+        $(".question3").starrr().on('starrr:change', function(e, value){
+            $('#q3').val(value);
+        });   
+        $(".question4").starrr().on('starrr:change', function(e, value){
+            $('#q4').val(value);
+        });
+        $(".rate").click(function(){
+            var pid = $(this).val();
+            $("#pid").val(pid);
+        });
+    });        
+</script>
+
+{% endblock content %}

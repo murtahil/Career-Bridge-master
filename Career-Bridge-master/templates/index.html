@@ -1,0 +1,291 @@
+<!doctype html>
+<!--
+	Photogenic by FreeHTML5.co
+	URL: https://freehtml5.co
+-->
+{% load static %}
+<html lang="en">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+		integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+	<!-- owl carousel css-->
+	<link rel="stylesheet" href="{% static 'index/owl-carousel/assets/owl.carousel.min.css' %}" type="text/css">
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="{% static 'index/css/bootstrap.min.css' %}">
+	<link rel="stylesheet" href="{% static 'index/css/style.css' %}">
+
+	<script src="{% static 'index/js/jquery.min.js' %}"></script>
+
+
+	<link rel="apple-touch-icon" href="{% static 'favicon.ico' %}">
+	<link rel="shortcut icon" href="{% static 'favicon.ico' %}">
+	<title>Index</title>
+	<style>
+		a {
+			cursor: pointer;
+		}
+
+		#particles-js {
+			position: fixed;
+			width: 100%;
+			height: 100%;
+		}
+	</style>
+	<script>
+		$(document).ready(function(){
+			$(window).scroll(function(){
+				$("#navoo").css("background", "linear-gradient(to right, #2a3c58 0%, #2a3c58 50%, #192943 100%)");
+				if($(window).scrollTop() == 0){
+					$("#navoo").css("background", "transparent");
+				}
+			});
+		});
+	</script>
+</head>
+
+<body>
+    <div class="" style="background: linear-gradient(to right, #3d5069 0%, #2a3c58 50%, #192943 100%);" id="particles-js">
+
+	
+	</div>
+	<script src="{% static 'js/particles.js' %}"></script>
+	<script src="{% static 'js/app.js' %}"></script>
+	<div id="fh5co-hero-carousel " class="carousel slide header static-top  fixed-top" data-ride="carousel">
+		<nav style=" " class="navbar navbar-expand-xl br-transparent" id="navoo" >
+			<div class="container">
+
+				<a class="navbar-brand mobile-logo" href="#"><img width=100 src="{% static 'index/images/logo2.png' %}"
+						alt="Vista Pro" /></a>
+				<button class="navbar-toggler" data-target="#my-nav" onclick="myFunction(this)" data-toggle="collapse">
+					<span class="bar1"></span> <span class="bar2"></span> <span class="bar3"></span> </button>
+
+				<div id="my-nav" class="collapse navbar-collapse">
+
+					<div>
+						<p class="text-left follow">Follow Us:</p>
+						<ul class="navbar-nav float-left social-links">
+							<li class="nav-item">
+								<a class="nav-link" href="https://www.facebook.com/#" target="_blank"><i
+										class="fab fa-facebook-f"></i></a>
+							</li>
+							<li class="nav-item"><a class="nav-link" href="#"><i class="fab fa-pinterest-p"
+										target="_blank"></i></a>
+							</li>
+							<li class="nav-item"><a class="nav-link" href="https://twitter.com/fh5co" target="_blank"><i
+										class="fab fa-twitter"></i></a>
+							</li>
+							<li class="nav-item"><a class="nav-link" href="#" target="_blank"><i
+										class="fab fa-google-plus-g"></i></a>
+							</li>
+
+						</ul>
+					</div>
+
+					<ul class="navbar-nav mx-auto logo-desktop">
+						<li class="nav-item active">
+							<a class="nav-link" href="/"><img width=100 src="{% static 'index/images/logo2.png' %}"
+									alt="Vista Pro" /></a>
+						</li>
+					</ul>
+
+					<ul class="navbar-nav float-right menu-links">
+						<li class="nav-item">
+							<a class="nav-link active" href="/">Home</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="#about-us">About Us</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="#contact">Contact Us</a>
+						</li>
+						{% if  request.user and request.user.user_type == 1 %}
+						<li class="nav-item">
+							<a class="nav-link" href="/university/home">Dashboard</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="/logout">Logout</a>
+						</li>
+						{% elif request.user and request.user.user_type == 2 %}
+						<li class="nav-item">
+							<a class="nav-link" href="/company/home">Dashboard</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="/logout">Logout</a>
+						</li>
+						{% else %}
+						<li class="nav-item">
+							<a class="nav-link" href="/login/">Login</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="/signup/">Sign Up</a>
+						</li>
+						{% endif %}
+
+
+					</ul>
+				</div>
+
+			</div>
+		</nav>
+	</div>
+
+
+<div class="container-fluid">
+    <div class="container">
+        <div class="row justify-content-center" style="margin-top: 15%;" id="hello">
+            <div class="col-lg-4 text-center p-5 rounded" style="background: linear-gradient(to right, #33ccff 0%, blue 50%, #192943 100%);">
+                <p class="text-light">Hey Alians! Sell and buy projects here.</p>
+                <h1 class="text-light">Bidding is like a war.</h1>
+                <br>
+                <br>
+				<p>Scroll down to see more...</p>
+					<a href="#about-us" class="page-scroll">
+						<img src="{% static 'index/images/arrows-down.png' %}" alt="arrow down" />
+					</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+	<div class="container-fluid fh5co-about-us mt-5" id="about-us">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-4">
+
+					<svg class="back-bg" viewBox="0 0 535 618">
+						<defs>
+							<linearGradient id="PSgrad_0" x1="0%" x2="100%" y1="0%" y2="0%">
+								<stop offset="0%" stop-color="rgb(88,192,255)" stop-opacity="1" />
+								<stop offset="100%" stop-color="rgb(18,112,228)" stop-opacity="1" />
+							</linearGradient>
+
+						</defs>
+						<path fill-rule="evenodd" fill="rgb(18, 112, 228)"
+							d="M6.000,-0.000 L499.000,-0.000 C502.314,-0.000 505.000,2.686 505.000,6.000 L505.000,612.000 C505.000,615.314 502.314,618.000 499.000,618.000 L6.000,618.000 C2.686,618.000 -0.000,615.314 -0.000,612.000 L-0.000,6.000 C-0.000,2.686 2.686,-0.000 6.000,-0.000 Z" />
+						<path fill="url(#PSgrad_0)"
+							d="M6.000,-0.000 L499.000,-0.000 C502.314,-0.000 505.000,2.686 505.000,6.000 L505.000,612.000 C505.000,615.314 502.314,618.000 499.000,618.000 L6.000,618.000 C2.686,618.000 -0.000,615.314 -0.000,612.000 L-0.000,6.000 C-0.000,2.686 2.686,-0.000 6.000,-0.000 Z" />
+					</svg>
+
+					<div class="owl-carousel owl-carousel1 owl-theme">
+						<div>
+							<img src="{% static 'index/images/slide1.png'%}" alt="Sliding Image" class="img-fluid" />
+						</div>
+						<div>
+							<img src="{% static 'index/images/slide22.png' %}" alt="Sliding Image" class="img-fluid" />
+						</div>
+						<div>
+							<img src="{% static 'index/images/slide3.png' %}" alt="Sliding Image" class="img-fluid" />
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-8">
+					<div class="about-us-content">
+						<h2>ABOUT US</h2>
+						<p>The demand for hiring experienced and competent professionals for quality products and services is the motivation behind Career Bridge. In the market, companies require professionals with enriched core competencies for their professional growth. Providing companies with less costing alternatives to develop their projects using new and better techniques that are developed and thoroughly researched by the expert faculty of academic facilities. This will be beneficial for fresh graduates to understand the market’s requirements and getting eligible for entry in their respective industries.</p>
+						
+					</div>
+
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+	<footer class="container-fluid fh5co-footer">
+		<div class="container" id="contact">
+			<div class="row">
+				<div class="col-lg-5">
+					<h2 class="text-light">CONTACT US TODAY NOW</h2>
+					<p class="text-light">
+						If you are looking for a Project
+					</p>
+					<p>
+						<span class="email"><img src="{% static 'index/images/email.png' %}"
+								alt="email icon" /></span><b class=" text-light">contact@example.com</b>
+					</p>
+					<p>
+						<span class="phone"><img src="{% static 'index/images/phone.png' %}"
+								alt="phone" /></span><b class=" text-light">+123-456-7890</b>
+                                
+					</p>
+					<h3 class="text-light">We Are Social:</h3>
+					<ul class="navbar-nav float-left social-links footer-social">
+						<li class="nav-item">
+							<a class="nav-link" href="https://www.facebook.com/fh5co"><i
+									class="fab fa-facebook-f"></i></a>
+						</li>
+						<li class="nav-item"><a class="nav-link" href="#"><i class="fab fa-pinterest-p"></i></a>
+						</li>
+						<li class="nav-item"><a class="nav-link" href="https://twitter.com/fh5co"><i
+									class="fab fa-twitter"></i></a>
+						</li>
+						<li class="nav-item"><a class="nav-link" href="#"><i class="fab fa-google-plus-g"></i></a>
+						</li>
+
+					</ul>
+				</div>
+
+				<div class="col-lg-7">
+					<div class="form-box">
+					
+						<h4>What would you like to talk about</h4>
+						<p>We would Love to Hear From you !</p>
+						<hr />
+						<table class="table table-light table-borderless">
+						<form method="post">
+						{% csrf_token %}
+							<tr>
+								<td><input type="text" class="form-control" name="name" placeholder="Name...">
+								</td>
+
+								<td><input type="text" class="form-control" name="email" placeholder="Email address">
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2"><textarea class="form-control" name="message" placeholder="You Message"></textarea>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<button type="submit">
+										SUBMIT NOW
+									</button>
+
+								</td>
+							</tr>
+							</form>
+							{% if isMessageSaved %}
+								<script> alert("Your message is sent to admins!");</script>						
+							{% endif %}
+							{% if isMailInvalid %}
+								<script> alert("Invalid email id!");</script>						
+							{% endif %}
+						</table>
+					</div>
+				</div>
+
+
+			</div>
+		</div>
+	</footer>
+	<div class="container-fluid copy">
+		<div class="col-lg-12 text-light">
+			<p class="text-light">Career Bridge &copy; 2020 - Powered by <a href="/"
+					class ="text-primary" target="_blank"><b>SST-UMT</b></a></p>
+		</div>
+	</div>
+
+	<script src="{% static 'index/js/bootstrap.min.js' %}"></script>
+	<script src="{% static 'index/owl-carousel/owl.carousel.min.js' %}"></script>
+	<script src="{% static 'index/js/isotope-docs.min.js?6' %}"></script>
+	<script src="{% static 'index/js/main.js' %}"></script>
+</body>
+
+</html>

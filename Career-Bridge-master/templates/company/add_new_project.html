@@ -1,0 +1,81 @@
+{% extends "company/base.html" %}
+
+{%block title%}Add Project{%endblock title%}
+{% block addnewactive%}active{% endblock addnewactive%}
+{% block contentheader%}Add Project{% endblock contentheader%}
+{% block breadcrumb%}Add Project{% endblock breadcrumb%}
+
+{% block content %}
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+    {% if form.errors %}
+    <p>{{form.errors}}</p>
+    {%endif%}
+        <!-- Small boxes (Stat box) -->
+        <div class="row">
+        <div class="col-md-2">
+        </div>
+            <div class="col-md-8">
+                <!-- general form elements disabled -->
+                <div class="card card-primary ">
+                    <div class="card-header">
+                        <h3 class="card-title">Project Details</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <form method="post">
+                        {% csrf_token %}
+                            <div class="card-body">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Project Name</label>
+                                {{form.project_name}}
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Project Description</label>
+                                 {{form.project_description}}
+                            </div>
+
+                           
+
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Start Date</label>
+                                {{form.start_date}}
+                            </div>
+
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Expected End Date</label>
+                                {{form.end_date}}
+                            </div>
+
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Start Biddingn Date</label>
+                                {{form.bidding_start}}
+                            </div>
+
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">End Bidding Date</label>
+                                {{form.bidding_end}}
+                            </div>
+                         </div>   
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary">Push</button>
+                            </div>
+                        </form>
+            </div>
+            <!-- /.card -->
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->                
+            </div>
+            <!--/.col (right) -->
+        </div>
+    </div>
+    <!-- /.row -->
+    
+    </div><!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+{% endblock content %}

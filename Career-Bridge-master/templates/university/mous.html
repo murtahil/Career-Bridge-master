@@ -1,0 +1,53 @@
+{% extends "university/base.html" %}
+
+{%block title%}MOU Details{%endblock title%}
+
+{%block content%}
+<div class="content">
+{% if messages %}				
+    {% for message in messages %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>{{message}}</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    {% endfor %}			
+{% endif %}
+    {% if project %}
+        <div class="row">
+            <div class="col-sm-12 rounded bg-dark p-3">
+                <h3 class="text-center text-light">MOU Details about {{project.project_name}}</h3>
+            </div>
+        </div>
+        <div class="row m-3">            
+            <div class="col-sm-5 bg-primary text-light p-3 rounded m-1">
+                <h3 class="text-center">University</h3>
+                {% if project.university_mou %}
+                    <a href="{{ project.university_mou.url }}" class="btn btn-dark mt-5" target="_new">Download MOU</a>
+                    <h3 class="mt-5">Remarks by {{project.developed_by}}:</h3>
+                    <p class="text-light">{{project.university_remarks}}</p>
+                {% else %}
+                    <p class="text-light text-center mt-5">You have not uploaded MOU yet!</p>
+                    <a type="submit" class="btn btn-dark mt-5" href="/university/sign_mou/{{project.pk}}">Sign MOU</a>
+
+                {% endif %}
+                
+            </div>
+            <div class="col-sm-5 bg-primary text-light p-3 rounded m-1">
+                <h3 class="text-center">Company</h3>
+                {% if project.company_mou %}
+                    <a href="{{ project.company_mou.url }}" class="btn btn-dark mt-5" target="_new">Download MOU</a>
+                    <h3 class="mt-5">Remarks by {{project.developed_for}}:</h3>
+                    <p class="text-light">{{project.company_remarks}}</p>
+                {% else %}
+                    <p class="text-light text-center mt-5">{{project.developed_for}} has not uploaded MOU yet!</p>
+                {% endif %}
+                
+            </div>
+        </div>
+    {% else %}
+        <h3 class="text-center bg-primary rounded mt-3 p-3">No Active Projects Yet!</h3>
+    {% endif %}
+</div>
+{%endblock content %}
